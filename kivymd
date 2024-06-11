@@ -1,0 +1,64 @@
+from kivy.lang import Builder
+from kivy.core.window import Window as win
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+
+Builder.load_string('''
+<gui>:
+    
+    MDScreen:
+        MDBoxLayout:
+            orientation:"vertical"
+            MDTopAppBar:    
+            
+                title:"KIVY MD"
+            
+                left_action_items: [["menu",lambda x:nav.set_state("toggle")]]
+
+                right_action_items: [["exit-to-app",lambda x:app.stop()]]
+            
+                pos_hint: {"center_x": .5, "center_y": .97} 
+            MDScrollView:              
+                id:box
+                MDList:
+                    spacing:10
+                    padding:10
+                    id : list
+            MDBoxLayout:
+                size_hint_y:0.1
+                padding:20
+                spacing:10
+                MDTextField:
+                	id : text
+                	text: ""
+                	hint_text:"write"                	
+                
+                MDRaisedButton:
+                	text:"add"
+                	pos_hint: {"center_x": .9, "center_y": .5} 
+            	    on_release:root.list()
+      
+        MDNavigationDrawer:
+            id: nav
+        
+''')
+
+    
+
+ 
+class gui(MDBoxLayout):
+
+	def list(self):
+		list = self.ids["list"]
+		text = self.ids["text"]
+		txt = text.text
+		list.add_widget(Builder.load_string("MDRaisedButton:\n    text: '{}' \n    size_hint_x:1".format(txt)))
+
+		    
+		
+
+class Test(MDApp):
+    def build(self):   
+       return gui()
+win.softinput_mode="pan"       
+Test().run()
